@@ -21,6 +21,9 @@ func main() {
 		if setting.Key == "vcs.time" {
 			vcsTime = setting.Value
 		}
+		if setting.Key == "vcs.modified" {
+			vscModified = setting.Value
+		}
 	}
 
 	r.GET("/ping", func(c *gin.Context) {
