@@ -11,7 +11,8 @@ func main() {
 	r := gin.Default()
 	buildInfo, _ := debug.ReadBuildInfo()
 
-	vcsRevision, vcsTime := "", ""
+	mainModuleVersion := buildInfo.Main.Version
+	vscModified, vcsRevision, vcsTime := "", "", ""
 
 	for _, setting := range buildInfo.Settings {
 		if setting.Key == "vcs.revision" {
@@ -24,6 +25,8 @@ func main() {
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
+			"version":     mainModuleVersion,
+			"vcsModified": vscModified,
 			"vcsRevision": vcsRevision,
 			"vcsTime":     vcsTime,
 		})
