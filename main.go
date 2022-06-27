@@ -10,12 +10,23 @@ import (
 func main() {
 	r := gin.Default()
 	buildInfo, _ := debug.ReadBuildInfo()
-	version := buildInfo.Main.Version
+
+	vcsRevision, vcsTime := "", ""
+
+	for _, setting := range buildInfo.Settings {
+		if setting.Key == "vcs.revision" {
+			vcsRevision = setting.Value
+		}
+		if setting.Key == "vcs.time" {
+			vcsTime = setting.Value
+		}
+	}
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"main module version": version,
+			"vcsRevision": vcsRevision,
+			"vcsTime":     vcsTime,
 		})
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	_ = r.Run()
 }
